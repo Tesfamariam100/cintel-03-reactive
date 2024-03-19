@@ -4,10 +4,12 @@ from shinywidgets import render_plotly
 from shiny import reactive, render, req
 import seaborn as sns
 import pandas as pd
-import palmerpenguins
+import palmerpenguins # This package provides the Palmer Penguins dataset
 
 # Use the built-in function to load the Palmer Penguins dataset
 penguins_df = palmerpenguins.load_penguins()
+
+# added title to main page
 ui.page_opts(title="Penguins Data Tesfamariam")
 
 # Create a Shiny UI sidebar
