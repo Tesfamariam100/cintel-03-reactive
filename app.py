@@ -9,6 +9,11 @@ import palmerpenguins
 # Load the Palmer Penguins dataset
 penguins_df = palmerpenguins.load_penguins()
 
+# Add a reactive calculation to filter the data
+@reactive.calc
+def filtered_data():
+    return penguins_df
+
 # Set the page title
 ui.page_opts(title="Penguins Data Tesfamariam")
 
@@ -31,15 +36,20 @@ with ui.sidebar(open="open"):
 with ui.layout_columns():
     with ui.card(full_screen=True):
         ui.h2("Penguin Data Table")
-        @render.data_frame
-        def penguins_datatable():
-            return render.DataTable(filtered_data()) 
+        with ui.div(style="height: 400px; overflow-y: auto;"):
+            @render.data_frame
+            def penguins_datatable():
+                return render.DataTable(filtered_data()) 
 
     with ui.card(full_screen=True):
         ui.h2("Penguin Data Grid")
-        @render.data_frame
-        def penguins_grid():
-            return render.DataGrid(filtered_data())
+        with ui.div(style="height: 400px; overflow-y: auto;"):
+            @render.data_frame
+            def penguins_grid():
+                return render.DataGrid(filtered_data())
+
+# added a horizontal rule
+ui.hr()
 
 # Create a layout for the graphs
 with ui.layout_columns():
@@ -49,20 +59,20 @@ with ui.layout_columns():
             with ui.nav_panel("Plotly Histogram"):
                 @render_plotly
                 def plotly_histogram():
-                    return px.histogram(filtered_data(), x="species", title="Plotly Histogram: Species")
+                    return px.histogram(filtered_data(), 
+                                        x=input.selected_attribute(),
+                                        nbins=input.plotly_bin_count(),
+                                        color="species")
 
             with ui.nav_panel("Seaborn Histogram"):
                 @render.plot
                 def seaborn_histogram():
-                    return sns.histplot(filtered_data(), x="species", kde=False)
+                    return sns.histplot(filtered_data(), 
+                                        x="species", kde=False)
 
             with ui.nav_panel("Plotly Scatterplot"):
                 @render_plotly
                 def plotly_scatterplot():
-                    return px.scatter(filtered_data(), x="flipper_length_mm", y="bill_length_mm", color="species", 
+                    return px.scatter(filtered_data(),
+                                      x="flipper_length_mm", y="bill_length_mm", color="species", 
                                       title="Plotly Scatterplot: Species")
-
-# Add a reactive calculation to filter the data
-@reactive.calc
-def filtered_data():
-    return penguins_df
