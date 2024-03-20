@@ -49,17 +49,17 @@ with ui.layout_columns():
             with ui.nav_panel("Plotly Histogram"):
                 @render_plotly
                 def plotly_histogram():
-                    return px.histogram(penguins_df, x="species", title="Plotly Histogram: Species")
+                    return px.histogram(filtered_data(), x="species", title="Plotly Histogram: Species")
 
             with ui.nav_panel("Seaborn Histogram"):
                 @render.plot
                 def seaborn_histogram():
-                    return sns.histplot(penguins_df, x="species", kde=False)
+                    return sns.histplot(filtered_data(), x="species", kde=False)
 
             with ui.nav_panel("Plotly Scatterplot"):
                 @render_plotly
                 def plotly_scatterplot():
-                    return px.scatter(penguins_df, x="flipper_length_mm", y="bill_length_mm", color="species", 
+                    return px.scatter(filtered_data(), x="flipper_length_mm", y="bill_length_mm", color="species", 
                                       title="Plotly Scatterplot: Species")
 
 # Add a reactive calculation to filter the data
