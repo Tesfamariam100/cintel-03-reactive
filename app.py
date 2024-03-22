@@ -60,20 +60,23 @@ with ui.layout_columns():
             return px.histogram(filtered_data(), 
                                 x=input.selected_attribute(),
                                 nbins=input.plotly_bin_count(),
-                                color="species")
-
-    with ui.card(full_screen=True):
-        ui.card_header("Seaborn Histogram")
-        @render.plot
-        def seaborn_histogram():
-            return sns.histplot(filtered_data(),
-                          x="species", kde=True), 
-        
+                                color="species").update_layout(height=600)
 
     with ui.card(full_screen=True):
         ui.card_header("Plotly Scatterplot")
         @render_plotly
         def plotly_scatterplot():
             return px.scatter(filtered_data(),
-                              x="flipper_length_mm", y="bill_length_mm", color="species", 
-                              title="Plotly Scatterplot: Species")
+                              x=input.selected_attribute(),
+                              y="flipper_length_mm",
+                              color="species", 
+                              title="Plotly Scatterplot: Species").update_layout(height=600)
+
+    with ui.card(full_screen=True):
+        ui.card_header("Seaborn Histogram")
+        @render.plot
+        def seaborn_histogram():
+            return sns.histplot(filtered_data(),
+                                x=input.selected_attribute(),
+                                bins=input.plotly_bin_count(),
+                                kde=True)
